@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     int lives = 3;
     int score = 0;
+    int maxScore = 0;
 
     [SerializeField]
     TextMeshProUGUI txtScore;
@@ -64,9 +65,14 @@ public class GameManager : MonoBehaviour
         if (lives == 0)
         {
             txtMessage.gameObject.SetActive(true);
-            foreach (GameObject obj in deshabilitar)
+            foreach (GameObject go in deshabilitar)
             {
-                obj.SetActive(false);
+                go.SetActive(false);
+            }
+            if (score > maxScore)
+            {
+                maxScore = score;
+                txtMaxScore.text = string.Format("{0,4:D4}", maxScore);
             }
         }
     }
