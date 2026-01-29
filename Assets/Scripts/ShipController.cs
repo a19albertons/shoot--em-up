@@ -105,6 +105,7 @@ public class ShipController : MonoBehaviour
         if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "AsteroidBig") // Añadido extra
         {
             Debug.Log("Colisión con nave enemiga");
+            GameManager.GetInstance().ReduceLife(); // Reducir vida en el GameManager
             DestroyShip(); // Destruir la nave
         }
     }

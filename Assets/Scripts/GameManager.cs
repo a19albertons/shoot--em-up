@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     static GameManager instance;
 
-    const int LIVES = 3;
+    int lives = 3;
 
     [SerializeField]
     TextMeshProUGUI txtScore;
@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     //Array paara las imágenes que marcan las vidas
     [SerializeField]
     GameObject[] imgLives;
+
+    [SerializeField]
+    GameObject[] deshabilitar;
 
     // Método estático para obtener la instancia del GameManager
     public static GameManager GetInstance()
@@ -38,6 +41,34 @@ public class GameManager : MonoBehaviour
         {
             // Si ya existe una instancia, destruimos el nuevo GameManager para mantener la singularidad
             Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        txtMessage.gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (lives == 0)
+        {
+            txtMessage.gameObject.SetActive(true);
+            foreach (GameObject obj in deshabilitar)
+            {
+                obj.SetActive(false);
+            }
+        }
+    }
+
+    public void ReduceLife()
+    {
+        lives--;
+        Debug.Log("Vidas restantes: " + lives);
+        while (lives >= 0 && lives < imgLives.Length)
+        {
+            imgLives[lives].SetActive(false);
+            break;
         }
     }
 }
