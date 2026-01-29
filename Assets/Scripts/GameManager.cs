@@ -1,4 +1,5 @@
 using TMPro;
+
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -69,10 +70,18 @@ public class GameManager : MonoBehaviour
             {
                 go.SetActive(false);
             }
+            // Destruye los objetos instanciados por spawner o nosotros
+            DestroyAllWithTag("AsteroidBig");
+            DestroyAllWithTag("Enemy");
+            DestroyAllWithTag("Shoot");
             if (score > maxScore)
             {
                 maxScore = score;
                 txtMaxScore.text = string.Format("{0,4:D4}", maxScore);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                
             }
         }
     }
@@ -86,5 +95,19 @@ public class GameManager : MonoBehaviour
     public void AddScore(int puntuacion)
     {
         score += puntuacion;
+        if (score == 5000 && lives < 3)
+        {
+            lives++;
+        }
+    }
+
+    // Destruye todos los GameObjects con la tag especificada
+    void DestroyAllWithTag(string tag)
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
+        foreach (GameObject obj in objects)
+        {
+            Destroy(obj);
+        }
     }
 }
