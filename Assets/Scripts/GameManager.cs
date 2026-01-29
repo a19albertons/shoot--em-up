@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     static GameManager instance;
 
     int lives = 3;
+    int score = 0;
 
     [SerializeField]
     TextMeshProUGUI txtScore;
@@ -27,6 +28,15 @@ public class GameManager : MonoBehaviour
     public static GameManager GetInstance()
     {
         return instance;
+    }
+
+    private void OnGUI()
+    {
+        for (int i = 0; i < imgLives.Length; i++)
+        {
+            imgLives[i].SetActive(i < lives);
+        }
+        txtScore.text = string.Format("{0,4:D4}", score);
     }
 
     // Función Awake se ejecuta cuando se instancia el objeto
@@ -65,10 +75,10 @@ public class GameManager : MonoBehaviour
     {
         lives--;
         Debug.Log("Vidas restantes: " + lives);
-        while (lives >= 0 && lives < imgLives.Length)
-        {
-            imgLives[lives].SetActive(false);
-            break;
-        }
+    }
+
+    public void AddScore(int puntuacion)
+    {
+        score += puntuacion;
     }
 }

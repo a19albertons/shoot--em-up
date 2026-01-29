@@ -35,6 +35,7 @@ public class ShootController : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            GameManager.GetInstance().AddScore(50); // Añadir puntos al destruir un enemigo
             Instantiate(hit, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
