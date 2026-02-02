@@ -1,5 +1,4 @@
 using TMPro;
-
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -17,14 +16,14 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI txtMaxScore;
 
     [SerializeField]
-    TextMeshProUGUI txtMessage;
+    TextMeshProUGUI txtMessage1;
+
+    [SerializeField]
+    TextMeshProUGUI txtMessage2;
 
     //Array paara las imágenes que marcan las vidas
     [SerializeField]
     GameObject[] imgLives;
-
-    [SerializeField]
-    GameObject[] deshabilitar;
 
     // Método estático para obtener la instancia del GameManager
     public static GameManager GetInstance()
@@ -58,18 +57,16 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        txtMessage.gameObject.SetActive(false);
+        txtMessage1.gameObject.SetActive(false);
+        txtMessage2.gameObject.SetActive(false);
     }
 
     void Update()
     {
         if (lives == 0)
         {
-            txtMessage.gameObject.SetActive(true);
-            foreach (GameObject go in deshabilitar)
-            {
-                go.SetActive(false);
-            }
+            txtMessage1.gameObject.SetActive(true);
+            txtMessage2.gameObject.SetActive(true);
             // Destruye los objetos instanciados por spawner o nosotros
             DestroyAllWithTag("AsteroidBig");
             DestroyAllWithTag("Enemy");
@@ -81,7 +78,11 @@ public class GameManager : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                
+                // Reiniciamos el juego
+                lives = 3;
+                score = 0;
+                txtMessage1.gameObject.SetActive(false);
+                txtMessage2.gameObject.SetActive(false);
             }
         }
     }
