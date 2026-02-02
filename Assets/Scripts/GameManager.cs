@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int puntuacion)
     {
         score += puntuacion;
+        // Controla la logica de date una vida extra. Al llegar a la mitad de la puntuación máxima
         if (score == 5000 && lives < 3)
         {
             lives++;
