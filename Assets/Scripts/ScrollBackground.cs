@@ -3,7 +3,9 @@ using UnityEngine;
 public class ScrollBackground : MonoBehaviour
 {
     // Añadimos un campo para la velocidad a la que se desplazarán las imágenes
-    [SerializeField] float speed;
+    [SerializeField]
+    float speed;
+
     // Altura de la imagen para determinar cuándo pasarla hacia arriba. La inicializaremos en el método Start()
     float height;
 
