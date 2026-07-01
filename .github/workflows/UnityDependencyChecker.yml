@@ -1,4 +1,4 @@
-name: Check Unity Dependencies (Safe)
+name: Check Unity Dependencies
 
 # Configuración del flujo de trabajo para ejecutarse diariamente a medianoche y permitir la ejecución manual
 on:
@@ -10,6 +10,15 @@ on:
 permissions:
     contents: write
     pull-requests: write
+
+# Variables de entorno
+env:
+    # Email y contraseña
+    UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+    UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    # Licencia de Unity (fichero)
+    UNITY_LICENSE: ${{ secrets.UNITY_LICENSE}}
 
 jobs:
     # Tarea para comprobar y actualizar las dependencias de Unity
@@ -30,9 +39,6 @@ jobs:
             # Ejecuta el método estático de nuestro script de C# usando GameCI
             - name: Ejecutar comprobación en Unity
               uses: game-ci/unity-builder@v4
-              env:
-                  # Indicamos la licencia
-                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
               with:
                   projectPath: .
                   # Ejecutamos la el fichero de C# creado que comprueba las dependencias y actualiza el manifest.json si es necesario
@@ -51,4 +57,5 @@ jobs:
 
                       Las versiones propuestas están garantizadas como **compatibles con la versión actual del motor** gracias a la API interna de Unity.
                   branch: "update-unity-dependencies"
+                  base: "desarrollo"
                   delete-branch: true
