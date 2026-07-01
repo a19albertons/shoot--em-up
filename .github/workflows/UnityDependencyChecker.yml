@@ -44,6 +44,32 @@ jobs:
                   # Indicamos a GameCI que ejecute tu script en lugar del Builder por defecto
                   buildMethod: DependencyChecker.UpdateDependencies
 
+            # Filtra los cambios en el manifest.json y packages-lock.json para evitar PRs de ficheros .meta y otros temporales generados por Unity
+            - name: Filtrar cambios de dependencias
+              run: |
+                # Comprobamos si el manifest.json tiene modificaciones sin guardar
+                if ! git diff --quiet Packages/manifest.json; then
+                    echo "Se detectaron cambios en las dependencias. Guardando cambios..."
+                    
+                # Agregamos al área de preparación (stage) solo los archivos de dependencias
+                git add Packages/manifest.json
+                    
+                    # Si tu proyecto hace uso de packages-lock.json, también lo agregamos si cambió
+                    if [ -f Packages/packages-lock.json ]; then
+                    git add Packages/packages-lock.json
+                    fi
+                    
+                    # Descartamos todos los demás cambios no preparados (como los archivos .meta)
+                    git checkout -- .
+                    # Eliminamos cualquier archivo nuevo que Unity haya creado temporalmente
+                    git clean -fd
+                else
+                    echo "No hay cambios en las dependencias. Limpiando cambios colaterales de Unity..."
+                    # Si no hay cambios en el manifest, descartamos todo para evitar un PR vacío
+                    git checkout -- .
+                    git clean -fd
+                fi
+
             # Crea una Pull Request si se han realizado cambios en el manifest.json
             - name: Crear Pull Request si hay cambios
               uses: peter-evans/create-pull-request@v6
