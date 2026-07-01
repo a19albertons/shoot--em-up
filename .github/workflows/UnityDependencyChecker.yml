@@ -1,0 +1,54 @@
+name: Check Unity Dependencies (Safe)
+
+# Configuración del flujo de trabajo para ejecutarse diariamente a medianoche y permitir la ejecución manual
+on:
+    schedule:
+        - cron: "0 0 * * *"
+    workflow_dispatch:
+
+# Configuración de permisos explicitos para el flujo de trabajo
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    # Tarea para comprobar y actualizar las dependencias de Unity
+    check-unity-updates:
+        runs-on: ubuntu-latest
+        steps:
+            # Configura checkout del repositorio
+            - name: Checkout del repositorio
+              uses: actions/checkout@v4
+
+            # Conserva la caché de la biblioteca de Unity para acelerar el proceso
+            - name: Caché de Unity
+              uses: actions/cache@v4
+              with:
+                  path: Library
+                  key: Library-update-check
+
+            # Ejecuta el método estático de nuestro script de C# usando GameCI
+            - name: Ejecutar comprobación en Unity
+              uses: game-ci/unity-builder@v4
+              env:
+                  # Indicamos la licencia
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+              with:
+                  projectPath: .
+                  # Ejecutamos la el fichero de C# creado que comprueba las dependencias y actualiza el manifest.json si es necesario
+                  # con los siguiente parametros configurados
+                  customParameters: -executeMethod DependencyChecker.UpdateDependencies -batchmode -nographics -quit
+
+            # Crea una Pull Request si se han realizado cambios en el manifest.json
+            - name: Crear Pull Request si hay cambios
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  commit-message: "chore(deps): actualizar dependencias de Unity (versiones compatibles)"
+                  title: "chore(deps): actualizar dependencias de Unity de forma segura"
+                  body: |
+                      Este es un Pull Request automático que ha analizado las dependencias utilizando el Package Manager nativo de Unity.
+
+                      Las versiones propuestas están garantizadas como **compatibles con la versión actual del motor** gracias a la API interna de Unity.
+                  branch: "update-unity-dependencies"
+                  delete-branch: true
