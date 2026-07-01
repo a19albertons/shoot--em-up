@@ -67,10 +67,6 @@ public class GameManager : MonoBehaviour
         {
             txtMessage1.gameObject.SetActive(true);
             txtMessage2.gameObject.SetActive(true);
-            // Destruye los objetos instanciados por spawner o nosotros
-            DestroyAllWithTag("AsteroidBig");
-            DestroyAllWithTag("Enemy");
-            DestroyAllWithTag("Shoot");
             if (score > maxScore)
             {
                 maxScore = score;
@@ -83,6 +79,7 @@ public class GameManager : MonoBehaviour
                 score = 0;
                 txtMessage1.gameObject.SetActive(false);
                 txtMessage2.gameObject.SetActive(false);
+                GameLogic.GetInstance().ReiniciarEntidades();
             }
         }
     }
@@ -91,6 +88,19 @@ public class GameManager : MonoBehaviour
     {
         lives--;
         Debug.Log("Vidas restantes: " + lives);
+
+        if (lives <= 0)
+        {
+            // Game over, paramos el juego y mostramos el mensaje de Game Over
+            lives = 0;
+            GameLogic.GetInstance().GameOver();
+            Debug.Log("Game Over");
+        }
+        else
+        {
+            // Reiniciamos el juego
+            GameLogic.GetInstance().ReiniciarEntidades();
+        }
     }
 
     public void AddScore(int puntuacion)
@@ -100,16 +110,6 @@ public class GameManager : MonoBehaviour
         if (score == 5000 && lives < 3)
         {
             lives++;
-        }
-    }
-
-    // Destruye todos los GameObjects con la tag especificada
-    void DestroyAllWithTag(string tag)
-    {
-        GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
-        foreach (GameObject obj in objects)
-        {
-            Destroy(obj);
         }
     }
 }
