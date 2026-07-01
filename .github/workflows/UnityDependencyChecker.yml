@@ -51,4 +51,5 @@ jobs:
 
                       Las versiones propuestas están garantizadas como **compatibles con la versión actual del motor** gracias a la API interna de Unity.
                   branch: "update-unity-dependencies"
+                  base: "desarrollo"
                   delete-branch: true
