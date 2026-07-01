@@ -1,4 +1,4 @@
-name: Check Unity Dependencies (Safe)
+name: Check Unity Dependencies
 
 # Configuración del flujo de trabajo para ejecutarse diariamente a medianoche y permitir la ejecución manual
 on:
