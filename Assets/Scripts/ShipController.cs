@@ -11,7 +11,6 @@ public class ShipController : MonoBehaviour
     [SerializeField]
     private Vector3 endPosition; // Posición final de la nave al inicio
 
-    [SerializeField]
     private float duration; // Duración de la transición al inicio
     private bool active = false; // Variable para determinar si se puede realizar alguna acción
 
@@ -30,11 +29,12 @@ public class ShipController : MonoBehaviour
     GameObject explosion;
     Vector3 initialPosition; // Posición inicial de la nave
 
+    private Coroutine startPlayerCoroutine; // Corutina para el inicio de la nave
+
     void Start()
     {
         initialPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
-        StartCoroutine("StartPlayer");
     }
 
     IEnumerator StartPlayer()
@@ -116,9 +116,33 @@ public class ShipController : MonoBehaviour
         active = false;
         // Instanciar la animación de la explosión
         Instantiate(explosion, transform.position, Quaternion.identity);
-        // Resetear posición de la nave
-        transform.position = initialPosition;
-        // Reiniciar la nave
-        StartCoroutine("StartPlayer");
+    }
+
+    // Función para establecer la duración de la transición al inicio
+    // a nivel interno se reutiliza el delay de game logic
+    public void SetDuration(float newDuration)
+    {
+        duration = newDuration;
+    }
+
+    public void StopStartPlayer()
+    {
+        // Detiene la corutina de la nave si su valor es distinto a null
+        if (startPlayerCoroutine != null)
+        {
+            // Resetear posición de la nave
+            transform.position = initialPosition;
+            StopCoroutine(startPlayerCoroutine);
+            startPlayerCoroutine = null;
+        }
+    }
+
+    public void StartStartPlayer()
+    {
+        // Inicia la corutina de la nave si su valor es nulo
+        if (startPlayerCoroutine == null)
+        {
+            startPlayerCoroutine = StartCoroutine("StartPlayer");
+        }
     }
 }
