@@ -90,8 +90,9 @@ jobs:
               run: |
                 mkdir zip-builds
                 cd all-builds
-                for dir in build-*; do
+                for dir in Build-*; do
                   if [ -d "$dir" ]; then
+                    echo "Comprimiendo $dir"
                     zip -r "../zip-builds/${dir}.zip" "$dir"
                   fi
                 done
