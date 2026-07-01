@@ -42,6 +42,7 @@ jobs:
     # tarea de compilación
     build:
         name: Compilación de Shot 'em up'
+        needs: test
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -66,3 +67,39 @@ jobs:
                 name: Build-${{ matrix.targetPlatform }}
                 path: Build/${{ matrix.targetPlatform }}
 
+
+    # tarea de despliegue
+    deploy:
+        name: Despliegue en github
+        needs: build
+        runs-on: ubuntu-latest
+        if: startsWith(github.ref, 'refs/tags/shoot--em-up')
+        steps:
+            # Configura checkout
+            - uses: actions/checkout@v4
+
+            # Descarga los artefactos de compilación
+            - name: Descargar artefactos de compilacion
+              uses: actions/download-artifact@v4
+              with:
+                path: all-builds
+
+            # comprimir cada build en un zip
+            - name: Comprimir builds en zip
+              run: |
+                mkdir zip-builds
+                cd all-builds
+                for dir in Build-*; do
+                  if [ -d "$dir" ]; then
+                    zip -r "../zip-builds/${dir}.zip" "$dir"
+                  fi
+                done
+
+            # Subir los zips a la release de github
+            - name: crear release y subir zips
+              uses: softprops/action-gh-release@v2
+              with:
+                #  Filtramos por todos los ficherosque acaban en .zip dentro de zip-builds
+                files: zip-builds/*.zip
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
