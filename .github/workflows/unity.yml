@@ -65,7 +65,8 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: Build-${{ matrix.targetPlatform }}
-                path: Build/${{ matrix.targetPlatform }}
+                path: build/${{ matrix.targetPlatform }}
+                if-no-files-found: error
 
 
     # tarea de despliegue
@@ -91,6 +92,7 @@ jobs:
                 cd all-builds
                 for dir in Build-*; do
                   if [ -d "$dir" ]; then
+                    echo "Comprimiendo $dir"
                     zip -r "../zip-builds/${dir}.zip" "$dir"
                   fi
                 done
