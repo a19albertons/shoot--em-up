@@ -16,13 +16,10 @@ public class AsteroidsSpawner : MonoBehaviour
     GameObject AsteroidBig;
 
     // Coordenadas mínima y máxima en el eje X
-    const float MIN_X = -4.5f;
-    const float MAX_X = 4.5f;
+    const float MIN_X = -4f;
+    const float MAX_X = 4f;
 
-    void Start()
-    {
-        StartCoroutine("AsteroidSpawn");
-    }
+    private Coroutine asteroidSpawnCoroutine;
 
     IEnumerator AsteroidSpawn()
     {
@@ -43,5 +40,31 @@ public class AsteroidsSpawner : MonoBehaviour
             // Esperar antes de generar el siguiente asteroide
             yield return new WaitForSeconds(interval);
         }
+    }
+
+    public void StopSpawning()
+    {
+        // Detetiene la corutina de generación de asteroides si su valor es distinto a null
+        if (asteroidSpawnCoroutine != null)
+        { 
+            // Detiene la corutina de generación de asteroides y la define como nula
+            StopCoroutine(asteroidSpawnCoroutine);
+            asteroidSpawnCoroutine = null;
+        }
+    }
+
+    public void StartSpawning()
+    {
+        // Inicia la corutina de generación de asteroides si su valor es nulo
+        if (asteroidSpawnCoroutine == null)
+        {
+            asteroidSpawnCoroutine = StartCoroutine("AsteroidSpawn");
+        }
+    }
+
+    // Función para establecer el retraso antes de comenzar a generar asteroides
+    public void SetDelay(float newDelay)
+    {
+        delay = newDelay;
     }
 }
