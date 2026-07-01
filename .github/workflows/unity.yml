@@ -25,6 +25,16 @@ jobs:
             # Configura checkout
             - uses: actions/checkout@v4
 
+            # Gestiona la cache de Unity
+            - name: Cache de Unity
+              uses: actions/cache@v4
+              with:
+                path: Library
+                key: Library-test-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+                restore-keys: |
+                  Library-test-
+                  Library-
+
             # Ejecuta los tests de Unity
             - name: Ejecutar tests de Unity
               uses: game-ci/unity-test-runner@v4
@@ -53,6 +63,16 @@ jobs:
         steps:
             # Configura checkout
             - uses: actions/checkout@v4
+
+                        # Gestiona la cache de Unity
+            - name: Cache de Unity
+              uses: actions/cache@v4
+              with:
+                path: Library
+                key: Library-build-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+                restore-keys: |
+                  Library-build-${{ matrix.targetPlatform }}-
+                  Library-
 
             # Ejecuta la compilación de Unity
             - name: Compilacion de Unity
