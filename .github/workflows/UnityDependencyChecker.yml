@@ -41,9 +41,8 @@ jobs:
               uses: game-ci/unity-builder@v4
               with:
                   projectPath: .
-                  # Ejecutamos la el fichero de C# creado que comprueba las dependencias y actualiza el manifest.json si es necesario
-                  # con los siguiente parametros configurados
-                  customParameters: -executeMethod DependencyChecker.UpdateDependencies -batchmode -nographics -quit
+                  # Indicamos a GameCI que ejecute tu script en lugar del Builder por defecto
+                  buildMethod: DependencyChecker.UpdateDependencies
 
             # Crea una Pull Request si se han realizado cambios en el manifest.json
             - name: Crear Pull Request si hay cambios
