@@ -16,8 +16,8 @@ public class AsteroidsSpawner : MonoBehaviour
     GameObject AsteroidBig;
 
     // Coordenadas mínima y máxima en el eje X
-    const float MIN_X = -4.5f;
-    const float MAX_X = 4.5f;
+    const float MIN_X = -4f;
+    const float MAX_X = 4f;
 
     void Start()
     {
