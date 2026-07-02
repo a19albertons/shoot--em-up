@@ -29,12 +29,12 @@ jobs:
             - name: Checkout del repositorio
               uses: actions/checkout@v4
 
-            # Conserva la caché de la biblioteca de Unity para acelerar el proceso
-            - name: Caché de Unity
-              uses: actions/cache@v4
-              with:
-                  path: Library
-                  key: Library-update-check
+            # # Conserva la caché de la biblioteca de Unity para acelerar el proceso
+            # - name: Caché de Unity
+            #   uses: actions/cache@v4
+            #   with:
+            #       path: Library
+            #       key: Library-update-check-
 
             # Ejecuta el método estático de nuestro script de C# usando GameCI
             - name: Ejecutar comprobación en Unity
