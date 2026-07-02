@@ -34,6 +34,8 @@ public static class DependencyChecker
                 string manifestPath = "Packages/manifest.json";
                 string manifestText = File.ReadAllText(manifestPath);
 
+                Debug.Log($"[CHECK] {package.name}: current={currentVersion} latestCompatible={latestCompatible ?? "NULL/EMPTY"}");
+
                 foreach (var package in listRequest.Result)
                 {
                     string currentVersion = package.version;
