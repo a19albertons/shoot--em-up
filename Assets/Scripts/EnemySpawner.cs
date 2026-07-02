@@ -8,21 +8,18 @@ public class EnemySpawner : MonoBehaviour
     float interval;
 
     // Tiempo de espera antes de comenzar a generar naves enemigas
-    [SerializeField]
     float delay;
 
     // Prefab de la nave enemiga
     [SerializeField]
     GameObject enemy;
 
+    [SerializeField]
+    private Coroutine enemySpawnerCoroutine;
+
     // Coordenadas mínima y máxima en el eje X
     const float MIN_X = -3.5f;
     const float MAX_X = 3.5f;
-
-    void Start()
-    {
-        StartCoroutine("EnemySpawn");
-    }
 
     IEnumerator EnemySpawn()
     {
@@ -40,6 +37,31 @@ public class EnemySpawner : MonoBehaviour
 
             // Esperar antes de generar la siguiente nave enemiga
             yield return new WaitForSeconds(interval);
+        }
+    }
+
+    // Función para establecer el retraso antes de comenzar a generar naves enemigas
+    public void SetDelay(float newDelay)
+    {
+        delay = newDelay;
+    }
+
+    public void StopSpawning()
+    {
+        // Detiene la corutina de generación de naves enemigas si su valor es distinto a null
+        if (enemySpawnerCoroutine != null)
+        {
+            StopCoroutine(enemySpawnerCoroutine);
+            enemySpawnerCoroutine = null;
+        }
+    }
+
+    public void StartSpawning()
+    {
+        // Inicia la corutina de generación de naves enemigas si su valor es nulo
+        if (enemySpawnerCoroutine == null)
+        {
+            enemySpawnerCoroutine = StartCoroutine("EnemySpawn");
         }
     }
 }
