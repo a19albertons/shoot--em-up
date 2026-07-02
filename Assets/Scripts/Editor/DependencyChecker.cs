@@ -29,12 +29,11 @@ public static class DependencyChecker
             if (listRequest.Status == StatusCode.Success)
             {
                 bool changesMade = false;
-                
+
                 // Leemos el manifest actual para modificarlo
                 string manifestPath = "Packages/manifest.json";
                 string manifestText = File.ReadAllText(manifestPath);
 
-                Debug.Log($"[CHECK] {package.name}: current={currentVersion} latestCompatible={latestCompatible ?? "NULL/EMPTY"}");
 
                 foreach (var package in listRequest.Result)
                 {
@@ -42,12 +41,15 @@ public static class DependencyChecker
                     // Unity nos dice de forma nativa cuál es la versión máxima compatible con ESTE editor
                     string latestCompatible = package.versions.latestCompatible;
 
+                    Debug.Log($"[CHECK] {package.name}: current={currentVersion} latestCompatible={latestCompatible ?? "NULL/EMPTY"}");
+
+
                     if (!string.IsNullOrEmpty(latestCompatible) && currentVersion != latestCompatible)
                     {
                         Debug.Log($"[UPDATE] {package.name}: {currentVersion} -> {latestCompatible}");
                         // Reemplazamos la versión vieja por la compatible en el manifest.json
                         manifestText = manifestText.Replace(
-                            $"\"{package.name}\": \"{currentVersion}\"", 
+                            $"\"{package.name}\": \"{currentVersion}\"",
                             $"\"{package.name}\": \"{latestCompatible}\""
                         );
                         changesMade = true;
