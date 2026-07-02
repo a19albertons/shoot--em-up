@@ -1,27 +1,25 @@
 using System;
-using System.IO;
 using System.Threading;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
+// Script realizado por qwen 3.7 plus
 public static class DependencyChecker
 {
-    private static bool isResolving = false;
-
     [MenuItem("Tools/Update Dependencies Safely")]
     public static void UpdateDependencies()
     {
         Debug.Log("Iniciando búsqueda de actualizaciones compatibles...");
 
-        // Lanzamos la petición de forma asíncrona, pero la esperaremos de forma síncrona
+        // 1. Listar paquetes actuales
         var listRequest = Client.List(offlineMode: false, includeIndirectDependencies: false);
 
-        // Bucle de espera síncrono obligatorio para Batchmode + -quit
         int timeoutMs = 45000; // 45 segundos de margen
         int elapsedMs = 0;
-        // Bucle de espera especifico para el primer paso que es actualizar el manifest.json
+        
+        // Gestiona no exceder el tiempo de espera al consultar el Package Manager
         while (!listRequest.IsCompleted)
         {
             Thread.Sleep(100);
@@ -34,77 +32,71 @@ public static class DependencyChecker
             }
         }
 
+        // Si la petición fue exitosa, procedemos a comprobar y actualizar versiones
         if (listRequest.Status == StatusCode.Success)
         {
             bool changesMade = false;
-            string manifestPath = "Packages/manifest.json";
-            string manifestText = File.ReadAllText(manifestPath);
 
-            // Comprueba paquete a paquete si hay una versión compatible más reciente y actualiza el manifest.json
+            // 2. Comprobar y actualizar versiones usando la API oficial (Client.Add)
             foreach (var package in listRequest.Result)
             {
                 string currentVersion = package.version;
                 string latestCompatible = package.versions.latestCompatible;
 
+                // Comprueba si cada librería tiene una versión compatible más reciente y actualiza si es necesario
                 if (!string.IsNullOrEmpty(latestCompatible) && currentVersion != latestCompatible)
                 {
                     Debug.Log($"[UPDATE] {package.name}: {currentVersion} -> {latestCompatible}");
-                    manifestText = manifestText.Replace(
-                        $"\"{package.name}\": \"{currentVersion}\"", 
-                        $"\"{package.name}\": \"{latestCompatible}\""
-                    );
-                    changesMade = true;
+                    
+                    // Client.Add() actualiza automáticamente manifest.json y packages-lock.json
+                    var addRequest = Client.Add($"{package.name}@{latestCompatible}");
+                    
+                    int addTimeoutMs = 180000; // 3 minutos de margen por paquete
+                    int addElapsedMs = 0;
+                    
+                    // Espera a que la petición de actualización se complete o se agote el tiempo
+                    while (!addRequest.IsCompleted)
+                    {
+                        Thread.Sleep(100);
+                        addElapsedMs += 100;
+                        if (addElapsedMs >= addTimeoutMs)
+                        {
+                            Debug.LogError($"Tiempo de espera agotado al actualizar {package.name}.");
+                            break;
+                        }
+                    }
+                    
+                    // Verifica el resultado de la actualización
+                    if (addRequest.Status == StatusCode.Success)
+                    {
+                        Debug.Log($"[SUCCESS] {package.name} actualizado correctamente.");
+                        changesMade = true;
+                    }
+                    else
+                    {
+                        // Manejo seguro de errores por si Error es null
+                        string errorMsg = addRequest.Error != null ? addRequest.Error.message : "Unknown error";
+                        Debug.LogError($"[ERROR] Fallo al actualizar {package.name}: {errorMsg}");
+                    }
                 }
             }
 
-            // Se ejecuta si hay cambios en el manifest.json, guardando los cambios y forzando la resolución de paquetes para actualizar packages-lock.json
             if (changesMade)
             {
-                File.WriteAllText(manifestPath, manifestText);
-                Debug.Log("Se han guardado las actualizaciones compatibles en manifest.json.");
-                
-                // Forzar resolución síncrona para actualizar packages-lock.json ---
-                Debug.Log("Forzando la resolución del Package Manager para regenerar packages-lock.json...");
-                isResolving = true;
-                
-                // Nos suscribimos al evento que nos avisa cuando finaliza la importación de paquetes
-                Events.registeredPackages += OnRegisteredPackages;
-                
-                // Disparamos la resolución
-                Client.Resolve();
-
-                // Espera síncrona para el entorno Batchmode
-                int resolveTimeoutMs = 180000; // 180 segundos de margen para descargar y resolver
-                int resolveElapsedMs = 0;
-                while (isResolving)
-                {
-                    Thread.Sleep(100);
-                    resolveElapsedMs += 100;
-                    if (resolveElapsedMs >= resolveTimeoutMs)
-                    {
-                        Debug.LogWarning("Tiempo de espera agotado esperando a que finalice la resolución de paquetes.");
-                        break;
-                    }
-                }
-                
-                // Nos desuscribimos para limpiar el evento
-                Events.registeredPackages -= OnRegisteredPackages;
-                // ----------------------------------------------------------------------------
-
-                // Forzamos la actualización del AssetDatabase antes de cerrar
+                // Forzamos la actualización del AssetDatabase para importar los nuevos archivos
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-                Debug.Log("Proceso completado. packages-lock.json actualizado con éxito.");
+                Debug.Log("Proceso completado. manifest.json y packages-lock.json actualizados con éxito.");
             }
             else
             {
-                // Log si todos estan actualizados
                 Debug.Log("Todos los paquetes ya están en su versión compatible más reciente.");
             }
         }
         else
         {
-            // Log en caso de error al listar los paquetes
-            Debug.LogError("Error al listar los paquetes: " + listRequest.Error.message);
+            // Log de error seguro por si Error es null
+            string errorMsg = listRequest.Error != null ? listRequest.Error.message : "Unknown error";
+            Debug.LogError("Error al listar los paquetes: " + errorMsg);
             if (Application.isBatchMode) EditorApplication.Exit(1);
             return;
         }
@@ -113,11 +105,5 @@ public static class DependencyChecker
         {
             EditorApplication.Exit(0);
         }
-    }
-
-    private static void OnRegisteredPackages(PackageRegistrationEventArgs args)
-    {
-        // En cuanto el Package Manager termina de registrar y escribir el archivo lock, liberamos el bucle
-        isResolving = false;
     }
 }
