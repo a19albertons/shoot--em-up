@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
+using System.Threading;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -8,76 +8,116 @@ using UnityEngine;
 
 public static class DependencyChecker
 {
-    private static ListRequest listRequest;
-    // Actualiza las dependencias de los paquetes instalados a la versión más reciente compatible con la versión actual del editor de Unity.
+    private static bool isResolving = false;
 
     [MenuItem("Tools/Update Dependencies Safely")]
     public static void UpdateDependencies()
     {
         Debug.Log("Iniciando búsqueda de actualizaciones compatibles...");
-        // Listamos solo los paquetes instalados directamente en el proyecto
-        listRequest = Client.List(offlineMode: false, includeIndirectDependencies: false);
-        EditorApplication.update += Progress;
-    }
 
-    private static void Progress()
-    {
-        if (listRequest.IsCompleted)
+        // Lanzamos la petición de forma asíncrona, pero la esperaremos de forma síncrona
+        var listRequest = Client.List(offlineMode: false, includeIndirectDependencies: false);
+
+        // Bucle de espera síncrono obligatorio para Batchmode + -quit
+        int timeoutMs = 45000; // 45 segundos de margen
+        int elapsedMs = 0;
+        // Bucle de espera especifico para el primer paso que es actualizar el manifest.json
+        while (!listRequest.IsCompleted)
         {
-            EditorApplication.update -= Progress;
-
-            if (listRequest.Status == StatusCode.Success)
+            Thread.Sleep(100);
+            elapsedMs += 100;
+            if (elapsedMs >= timeoutMs)
             {
-                bool changesMade = false;
-
-                // Leemos el manifest actual para modificarlo
-                string manifestPath = "Packages/manifest.json";
-                string manifestText = File.ReadAllText(manifestPath);
-
-
-                foreach (var package in listRequest.Result)
-                {
-                    string currentVersion = package.version;
-                    // Unity nos dice de forma nativa cuál es la versión máxima compatible con ESTE editor
-                    string latestCompatible = package.versions.latestCompatible;
-
-                    Debug.Log($"[CHECK] {package.name}: current={currentVersion} latestCompatible={latestCompatible ?? "NULL/EMPTY"}");
-
-
-                    if (!string.IsNullOrEmpty(latestCompatible) && currentVersion != latestCompatible)
-                    {
-                        Debug.Log($"[UPDATE] {package.name}: {currentVersion} -> {latestCompatible}");
-                        // Reemplazamos la versión vieja por la compatible en el manifest.json
-                        manifestText = manifestText.Replace(
-                            $"\"{package.name}\": \"{currentVersion}\"",
-                            $"\"{package.name}\": \"{latestCompatible}\""
-                        );
-                        changesMade = true;
-                    }
-                }
-
-                // Guardamos los cambios en el manifest.json si se realizaron actualizaciones
-                // Generamos un log para informar al usuario en el ci cd
-                if (changesMade)
-                {
-                    File.WriteAllText(manifestPath, manifestText);
-                    Debug.Log("Se han guardado las actualizaciones compatibles en manifest.json.");
-                }
-                else
-                {
-                    Debug.Log("Todos los paquetes ya están en su versión compatible más reciente.");
-                }
-            }
-            // En caso de error al procesar el manifest.json, mostramos un mensaje de error en la consola
-            else
-            {
-                Debug.LogError("Error al listar los paquetes: " + listRequest.Error.message);
-            }
-
-            if (Application.isBatchMode)
-            {
-                EditorApplication.Exit(0);
+                Debug.LogError("Error: Tiempo de espera agotado al consultar el Package Manager.");
+                if (Application.isBatchMode) EditorApplication.Exit(1);
+                return;
             }
         }
+
+        if (listRequest.Status == StatusCode.Success)
+        {
+            bool changesMade = false;
+            string manifestPath = "Packages/manifest.json";
+            string manifestText = File.ReadAllText(manifestPath);
+
+            // Comprueba paquete a paquete si hay una versión compatible más reciente y actualiza el manifest.json
+            foreach (var package in listRequest.Result)
+            {
+                string currentVersion = package.version;
+                string latestCompatible = package.versions.latestCompatible;
+
+                if (!string.IsNullOrEmpty(latestCompatible) && currentVersion != latestCompatible)
+                {
+                    Debug.Log($"[UPDATE] {package.name}: {currentVersion} -> {latestCompatible}");
+                    manifestText = manifestText.Replace(
+                        $"\"{package.name}\": \"{currentVersion}\"", 
+                        $"\"{package.name}\": \"{latestCompatible}\""
+                    );
+                    changesMade = true;
+                }
+            }
+
+            // Se ejecuta si hay cambios en el manifest.json, guardando los cambios y forzando la resolución de paquetes para actualizar packages-lock.json
+            if (changesMade)
+            {
+                File.WriteAllText(manifestPath, manifestText);
+                Debug.Log("Se han guardado las actualizaciones compatibles en manifest.json.");
+                
+                // Forzar resolución síncrona para actualizar packages-lock.json ---
+                Debug.Log("Forzando la resolución del Package Manager para regenerar packages-lock.json...");
+                isResolving = true;
+                
+                // Nos suscribimos al evento que nos avisa cuando finaliza la importación de paquetes
+                Events.registeredPackages += OnRegisteredPackages;
+                
+                // Disparamos la resolución
+                Client.Resolve();
+
+                // Espera síncrona para el entorno Batchmode
+                int resolveTimeoutMs = 180000; // 180 segundos de margen para descargar y resolver
+                int resolveElapsedMs = 0;
+                while (isResolving)
+                {
+                    Thread.Sleep(100);
+                    resolveElapsedMs += 100;
+                    if (resolveElapsedMs >= resolveTimeoutMs)
+                    {
+                        Debug.LogWarning("Tiempo de espera agotado esperando a que finalice la resolución de paquetes.");
+                        break;
+                    }
+                }
+                
+                // Nos desuscribimos para limpiar el evento
+                Events.registeredPackages -= OnRegisteredPackages;
+                // ----------------------------------------------------------------------------
+
+                // Forzamos la actualización del AssetDatabase antes de cerrar
+                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+                Debug.Log("Proceso completado. packages-lock.json actualizado con éxito.");
+            }
+            else
+            {
+                // Log si todos estan actualizados
+                Debug.Log("Todos los paquetes ya están en su versión compatible más reciente.");
+            }
+        }
+        else
+        {
+            // Log en caso de error al listar los paquetes
+            Debug.LogError("Error al listar los paquetes: " + listRequest.Error.message);
+            if (Application.isBatchMode) EditorApplication.Exit(1);
+            return;
+        }
+
+        if (Application.isBatchMode)
+        {
+            EditorApplication.Exit(0);
+        }
+    }
+
+    private static void OnRegisteredPackages(PackageRegistrationEventArgs args)
+    {
+        // En cuanto el Package Manager termina de registrar y escribir el archivo lock, liberamos el bucle
+        isResolving = false;
     }
 }
