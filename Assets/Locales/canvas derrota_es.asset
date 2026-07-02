@@ -17,7 +17,15 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: dbdb30626f9588245b28a1734b4fbba4, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 126310453248
+    m_Localized: Fin Del Juego
+    m_Metadata:
+      m_Items: []
+  - m_Id: 282816712704
+    m_Localized: Presiona Espacio Para Reiniciar
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

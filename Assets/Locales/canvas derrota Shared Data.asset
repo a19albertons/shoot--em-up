@@ -13,8 +13,16 @@ MonoBehaviour:
   m_Name: canvas derrota Shared Data
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: canvas derrota
-  m_TableCollectionNameGuidString: 00000000000000000000000000000000
-  m_Entries: []
+  m_TableCollectionNameGuidString: dbdb30626f9588245b28a1734b4fbba4
+  m_Entries:
+  - m_Id: 126310453248
+    m_Key: canvas.hasPerdido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 282816712704
+    m_Key: canvas.reiniciar
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -14,8 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Localization-Assets-Shared
   m_GUID: 236826f45960ae92eb307e79afd2f5cb
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: dbdb30626f9588245b28a1734b4fbba4
+    m_Address: Assets/Locales/canvas derrota Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 05d165f53c2bcc70580d4c5ae922902e, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: f746a4b2fb68820208f624d7729a160b, type: 2}
+    - {fileID: 11400000, guid: 7b02162fe3ba69149bb97e5684e98409, type: 2}

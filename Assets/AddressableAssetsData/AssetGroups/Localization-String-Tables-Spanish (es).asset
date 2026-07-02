@@ -14,8 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Localization-String-Tables-Spanish (es)
   m_GUID: 5861581fe5f9c034fafaa3d38bb9b869
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 5c128e866fd3671f4888220a65b53ac4
+    m_Address: canvas derrota_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 05d165f53c2bcc70580d4c5ae922902e, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: 76d31e0655965fd01bd1dcd201ca27fb, type: 2}
+    - {fileID: 11400000, guid: a3f7b75f76fd70ee6bcc83747a18a180, type: 2}
