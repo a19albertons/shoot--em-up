@@ -65,11 +65,26 @@ public class GameLogic : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject); // Evitar que el objeto se destruya al cambiar de escena
+            DontDestroyOnLoad(AsteroidSpawner.gameObject); // Evitar que el objeto se destruya al cambiar de escena
+            DontDestroyOnLoad(EnemySpawner.gameObject); // Evitar que el objeto se destruya al cambiar de escena
+            DontDestroyOnLoad(shipController.gameObject); // Evitar que el objeto se destruya al cambiar de escena
         }
         else if (instance != this)
         {
             // Si ya existe una instancia, destruimos el nuevo GameManager para mantener la singularidad
             Destroy(gameObject);
+            if (AsteroidSpawner != null)
+            {
+                Destroy(AsteroidSpawner.gameObject);
+            }
+            if (EnemySpawner != null)
+            {
+                Destroy(EnemySpawner.gameObject);
+            }
+            if (shipController != null)
+            {
+                Destroy(shipController.gameObject); 
+            }
         }
     }
 

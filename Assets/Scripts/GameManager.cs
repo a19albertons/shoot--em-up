@@ -25,6 +25,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject[] imgLives;
 
+    [SerializeField]
+    Canvas canvas;
+
+    void Start()
+    {
+        Cursor.visible = false; // Oculta el cursor al iniciar el juego
+    }
+
     // Método estático para obtener la instancia del GameManager
     public static GameManager GetInstance()
     {
@@ -47,18 +55,17 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject); // Evitar que el objeto se destruya al cambiar de escena
+            DontDestroyOnLoad(canvas.gameObject); // Evitar que el objeto se destruya al cambiar de escena
         }
         else if (instance != this)
         {
             // Si ya existe una instancia, destruimos el nuevo GameManager para mantener la singularidad
             Destroy(gameObject);
+            if (canvas != null)
+            {
+                Destroy(canvas.gameObject); // Evitar que el objeto se destruya al cambiar de escena
+            }
         }
-    }
-
-    void Start()
-    {
-        txtMessage1.gameObject.SetActive(false);
-        txtMessage2.gameObject.SetActive(false);
     }
 
     void Update()
@@ -111,5 +118,13 @@ public class GameManager : MonoBehaviour
         {
             lives++;
         }
+    }
+
+    public void ResetGame()
+    {
+        lives = 3;
+        score = 0;
+        txtMessage1.gameObject.SetActive(false);
+        txtMessage2.gameObject.SetActive(false);
     }
 }
