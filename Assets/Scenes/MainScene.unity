@@ -2592,6 +2592,7 @@ MonoBehaviour:
   shootPrefab: {fileID: 4370528192439226374, guid: d86c59a45e3ba8534abee424984558d6, type: 3}
   shootOffset: 0.5
   explosion: {fileID: 8604771820467719619, guid: 23434e6973a627ea180ec39e6d0d8ab6, type: 3}
+  trail: {fileID: 450236065}
 --- !u!70 &1489804830
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
