@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: canvas derrota Shared Data
+  m_Name: traduciones Shared Data
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
-  m_TableCollectionName: canvas derrota
+  m_TableCollectionName: traduciones
   m_TableCollectionNameGuidString: dbdb30626f9588245b28a1734b4fbba4
   m_Entries:
   - m_Id: 126310453248
@@ -21,6 +21,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 282816712704
     m_Key: canvas.reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 508714346909696
+    m_Key: menuPausa.reanudar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 509104199077888
+    m_Key: menuPausa.reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 509301897596928
+    m_Key: menuPausa.salir
     m_Metadata:
       m_Items: []
   m_Metadata:
