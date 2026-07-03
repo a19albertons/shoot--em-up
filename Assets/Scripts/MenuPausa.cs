@@ -54,6 +54,7 @@ public class MenuPausa : MonoBehaviour
         // Es importante devolver la escala de tiempo a 1 antes de recargar la escena
         Time.timeScale = 1f;
         GameLogic.GetInstance().ReiniciarEntidades();
+        GameManager.GetInstance().ResetGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

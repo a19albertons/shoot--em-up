@@ -73,6 +73,18 @@ public class GameLogic : MonoBehaviour
         {
             // Si ya existe una instancia, destruimos el nuevo GameManager para mantener la singularidad
             Destroy(gameObject);
+            if (AsteroidSpawner != null)
+            {
+                Destroy(AsteroidSpawner.gameObject);
+            }
+            if (EnemySpawner != null)
+            {
+                Destroy(EnemySpawner.gameObject);
+            }
+            if (shipController != null)
+            {
+                Destroy(shipController.gameObject); 
+            }
         }
     }
 

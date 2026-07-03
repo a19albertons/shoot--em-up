@@ -61,6 +61,10 @@ public class GameManager : MonoBehaviour
         {
             // Si ya existe una instancia, destruimos el nuevo GameManager para mantener la singularidad
             Destroy(gameObject);
+            if (canvas != null)
+            {
+                Destroy(canvas.gameObject); // Evitar que el objeto se destruya al cambiar de escena
+            }
         }
     }
 
@@ -114,5 +118,13 @@ public class GameManager : MonoBehaviour
         {
             lives++;
         }
+    }
+
+    public void ResetGame()
+    {
+        lives = 3;
+        score = 0;
+        txtMessage1.gameObject.SetActive(false);
+        txtMessage2.gameObject.SetActive(false);
     }
 }
