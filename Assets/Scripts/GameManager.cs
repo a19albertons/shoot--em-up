@@ -68,6 +68,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        txtMessage1.gameObject.SetActive(false);
+        txtMessage2.gameObject.SetActive(false);
+        maxScore = ScoreManager.GetInstance().GetMaxScore();
+        txtMaxScore.text = string.Format("{0,4:D4}", maxScore);
+    }
+
     void Update()
     {
         if (lives == 0)
@@ -102,6 +110,9 @@ public class GameManager : MonoBehaviour
             lives = 0;
             GameLogic.GetInstance().GameOver();
             Debug.Log("Game Over");
+            // Guardamos la puntuación máxima si es necesario y obtenemos el scoreManager para enviar la puntuación
+            ScoreManager.GetInstance().SubmitScore(score);
+            Debug.Log("Puntuación enviada fue " + score);
         }
         else
         {
