@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: canvas derrota_gl
+  m_Name: traduciones_gl
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
   m_LocaleId:
     m_Code: gl
@@ -24,6 +24,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 282816712704
     m_Localized: Presiona Espacio Para Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 508714346909696
+    m_Localized: Reanudar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 509104199077888
+    m_Localized: Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 509301897596928
+    m_Localized: Salir
     m_Metadata:
       m_Items: []
   references:
