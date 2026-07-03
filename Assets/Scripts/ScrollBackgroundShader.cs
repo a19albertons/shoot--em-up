@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Clase que controla el desplazamiento del fondo del juego utilizando un shader, creando un efecto de movimiento continuo. Maneja la velocidad de desplazamiento y aplica el desplazamiento a la textura del material del objeto.
+/// </summary>
 public class ScrollBackgroundShader : MonoBehaviour
 {
     // Velocidad a la que se desplazarán las imágenes
@@ -10,6 +13,9 @@ public class ScrollBackgroundShader : MonoBehaviour
     Renderer render;
 
     // Start se llama antes del primer frame update
+    /// <summary>
+    /// Inicializa el componente Renderer del objeto para poder manipular la textura del material y aplicar el desplazamiento continuo.
+    /// </summary>
     void Start()
     {
         // Inicializamos el componente
@@ -17,6 +23,9 @@ public class ScrollBackgroundShader : MonoBehaviour
     }
 
     // Update se llama una vez por frame
+    /// <summary>
+    /// Actualiza el desplazamiento de la textura del material en cada frame, creando un efecto de movimiento continuo. Calcula el offset basado en la velocidad y el tiempo transcurrido, y lo aplica al material del objeto.
+    /// </summary>
     void Update()
     {
         // Vector que representa la cantidad de desplazamiento de la textura

@@ -1,6 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Clase que se encarga de generar naves enemigas en intervalos regulares.
+/// Permite establecer un retraso inicial antes de comenzar la generación y el intervalo
+/// </summary>
 public class EnemySpawner : MonoBehaviour
 {
     // Tiempo entre intervalos de generación de naves enemigas
@@ -21,6 +25,10 @@ public class EnemySpawner : MonoBehaviour
     const float MIN_X = -3.5f;
     const float MAX_X = 3.5f;
 
+    /// <summary>
+    /// Inicia la corutina de generación de naves enemigas al comenzar el juego.
+    /// </summary>
+    /// <returns>Devuelve la corutina de generación de naves enemigas.</returns>
     IEnumerator EnemySpawn()
     {
         // Retraso antes de comenzar a generar naves enemigas
@@ -41,11 +49,19 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Función para establecer el retraso antes de comenzar a generar naves enemigas
+    /// <summary>
+    /// Establece el retraso antes de comenzar a generar naves enemigas.
+    /// Esta pensada para ser usada desde un script externo, como el GameLogic, para ajustar dinámicamente el retraso según las necesidades del juego.
+    /// </summary>
+    /// <param name="newDelay"></param>
     public void SetDelay(float newDelay)
     {
         delay = newDelay;
     }
 
+    /// <summary>
+    /// Detiene la generación de naves enemigas y finaliza la corutina correspondiente.
+    /// </summary>
     public void StopSpawning()
     {
         // Detiene la corutina de generación de naves enemigas si su valor es distinto a null
@@ -56,6 +72,9 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Inicia la generación de naves enemigas y comienza la corutina correspondiente.
+    /// </summary>
     public void StartSpawning()
     {
         // Inicia la corutina de generación de naves enemigas si su valor es nulo

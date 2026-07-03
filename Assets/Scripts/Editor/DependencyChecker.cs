@@ -6,8 +6,16 @@ using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 // Script realizado por qwen 3.7 plus
+/// <summary>
+/// Clase para comprobar y actualizar dependencias de Unity de manera segura.
+/// Utiliza la API oficial de Unity Package Manager para listar y actualizar paquetes.
+/// Incluye manejo de errores y tiempos de espera para evitar bloqueos en el editor.
+/// </summary>
 public static class DependencyChecker
 {
+    /// <summary>
+    /// Método principal para actualizar dependencias de Unity.
+    /// </summary>
     [MenuItem("Tools/Update Dependencies Safely")]
     public static void UpdateDependencies()
     {
@@ -18,7 +26,7 @@ public static class DependencyChecker
 
         int timeoutMs = 45000; // 45 segundos de margen
         int elapsedMs = 0;
-        
+
         // Gestiona no exceder el tiempo de espera al consultar el Package Manager
         while (!listRequest.IsCompleted)
         {
@@ -47,13 +55,13 @@ public static class DependencyChecker
                 if (!string.IsNullOrEmpty(latestCompatible) && currentVersion != latestCompatible)
                 {
                     Debug.Log($"[UPDATE] {package.name}: {currentVersion} -> {latestCompatible}");
-                    
+
                     // Client.Add() actualiza automáticamente manifest.json y packages-lock.json
                     var addRequest = Client.Add($"{package.name}@{latestCompatible}");
-                    
+
                     int addTimeoutMs = 180000; // 3 minutos de margen por paquete
                     int addElapsedMs = 0;
-                    
+
                     // Espera a que la petición de actualización se complete o se agote el tiempo
                     while (!addRequest.IsCompleted)
                     {
@@ -65,7 +73,7 @@ public static class DependencyChecker
                             break;
                         }
                     }
-                    
+
                     // Verifica el resultado de la actualización
                     if (addRequest.Status == StatusCode.Success)
                     {
