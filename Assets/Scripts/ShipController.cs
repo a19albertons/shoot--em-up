@@ -29,6 +29,10 @@ public class ShipController : MonoBehaviour
     GameObject explosion;
     Vector3 initialPosition; // Posición inicial de la nave
 
+    [Tooltip("Arrastra aquí el objeto TrailRenderer que usa la nave")]
+    [SerializeField]
+    GameObject trail; // Referencia al objeto TrailRenderer
+
     private Coroutine startPlayerCoroutine; // Corutina para el inicio de la nave
 
     void Start()
@@ -132,6 +136,7 @@ public class ShipController : MonoBehaviour
         {
             // Resetear posición de la nave
             transform.position = initialPosition;
+            trail.GetComponent<TrailRenderer>().Clear(); // Limpia el TrailRenderer para evitar que se vea la estela de la nave al reiniciar
             StopCoroutine(startPlayerCoroutine);
             startPlayerCoroutine = null;
         }
