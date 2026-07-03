@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Canvas canvas;
 
+    void Start()
+    {
+        Cursor.visible = false; // Oculta el cursor al iniciar el juego
+    }
+
     // Método estático para obtener la instancia del GameManager
     public static GameManager GetInstance()
     {
