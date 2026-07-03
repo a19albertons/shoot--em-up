@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Cursor.visible = false; // Oculta el cursor al iniciar el juego
+        txtMessage1.gameObject.SetActive(false);
+        txtMessage2.gameObject.SetActive(false);
+        maxScore = ScoreManager.GetInstance().GetMaxScore();
+        txtMaxScore.text = string.Format("{0,4:D4}", maxScore);
     }
 
     // Método estático para obtener la instancia del GameManager
@@ -66,14 +70,6 @@ public class GameManager : MonoBehaviour
                 Destroy(canvas.gameObject); // Evitar que el objeto se destruya al cambiar de escena
             }
         }
-    }
-
-    void Start()
-    {
-        txtMessage1.gameObject.SetActive(false);
-        txtMessage2.gameObject.SetActive(false);
-        maxScore = ScoreManager.GetInstance().GetMaxScore();
-        txtMaxScore.text = string.Format("{0,4:D4}", maxScore);
     }
 
     void Update()
