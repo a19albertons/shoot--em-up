@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 285724999}
   - component: {fileID: 285724998}
   - component: {fileID: 285725000}
+  - component: {fileID: 285725001}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -326,6 +327,18 @@ MonoBehaviour:
   AsteroidSpawner: {fileID: 1855036261}
   EnemySpawner: {fileID: 1785165101}
   shipController: {fileID: 1489804829}
+--- !u!114 &285725001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285724997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f36b34fd11f8b3c22b57a06ef0eb18f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
 --- !u!1 &450236065
 GameObject:
   m_ObjectHideFlags: 0
