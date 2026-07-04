@@ -125,5 +125,6 @@ jobs:
               with:
                 #  Filtramos por todos los ficherosque acaban en .zip dentro de zip-builds
                 files: zip-builds/*.zip
+                body_path: cambios.md
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

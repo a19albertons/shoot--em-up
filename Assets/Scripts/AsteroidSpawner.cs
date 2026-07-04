@@ -1,6 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Clase que se encarga de generar asteroides en intervalos regulares.
+/// Permite establecer un retraso inicial antes de comenzar la generación y el intervalo
+/// </summary>
 public class AsteroidsSpawner : MonoBehaviour
 {
     // Tiempo entre intervalos de generación de asteroides
@@ -21,6 +25,10 @@ public class AsteroidsSpawner : MonoBehaviour
 
     private Coroutine asteroidSpawnCoroutine;
 
+    /// <summary>
+    /// Inicia la corutina de generación de asteroides al comenzar el juego.
+    /// </summary>
+    /// <returns>Devuelve la corutina de generación de asteroides.</returns>
     IEnumerator AsteroidSpawn()
     {
         // Retraso antes de empezar a generar asteroides
@@ -42,17 +50,23 @@ public class AsteroidsSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Detiene la generación de asteroides y finaliza la corutina correspondiente.
+    /// </summary>
     public void StopSpawning()
     {
         // Detetiene la corutina de generación de asteroides si su valor es distinto a null
         if (asteroidSpawnCoroutine != null)
-        { 
+        {
             // Detiene la corutina de generación de asteroides y la define como nula
             StopCoroutine(asteroidSpawnCoroutine);
             asteroidSpawnCoroutine = null;
         }
     }
 
+    /// <summary>
+    /// Inicia la generación de asteroides y comienza la corutina correspondiente.
+    /// </summary>
     public void StartSpawning()
     {
         // Inicia la corutina de generación de asteroides si su valor es nulo
@@ -63,6 +77,11 @@ public class AsteroidsSpawner : MonoBehaviour
     }
 
     // Función para establecer el retraso antes de comenzar a generar asteroides
+    /// <summary>
+    /// Establece el retraso antes de comenzar a generar asteroides.
+    /// Esta pensada para ser usada desde un script externo, como el GameLogic, para ajustar dinámicamente el retraso según las necesidades del juego.
+    /// </summary>
+    /// <param name="newDelay"></param>
     public void SetDelay(float newDelay)
     {
         delay = newDelay;
