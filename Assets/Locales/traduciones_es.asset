@@ -10,20 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: canvas derrota_en
+  m_Name: traduciones_es
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
   m_LocaleId:
-    m_Code: en
+    m_Code: es
   m_SharedData: {fileID: 11400000, guid: dbdb30626f9588245b28a1734b4fbba4, type: 2}
   m_Metadata:
     m_Items: []
   m_TableData:
   - m_Id: 126310453248
-    m_Localized: Game Over
+    m_Localized: Fin Del Juego
     m_Metadata:
       m_Items: []
   - m_Id: 282816712704
-    m_Localized: Press Space To Restart
+    m_Localized: Presiona Espacio Para Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 508714346909696
+    m_Localized: Reanudar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 509104199077888
+    m_Localized: Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 509301897596928
+    m_Localized: Salir
     m_Metadata:
       m_Items: []
   references:

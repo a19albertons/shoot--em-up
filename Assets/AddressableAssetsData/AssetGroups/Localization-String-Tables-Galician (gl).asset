@@ -16,10 +16,11 @@ MonoBehaviour:
   m_GUID: a3660356ae2fdcc1aaf3db32ba750148
   m_SerializeEntries:
   - m_GUID: c8c1857086965799a99fec8381bc8b8c
-    m_Address: canvas derrota_gl
+    m_Address: traduciones_gl
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-gl
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 05d165f53c2bcc70580d4c5ae922902e, type: 2}
