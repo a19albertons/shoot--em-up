@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
                 maxScore = score;
                 txtMaxScore.text = string.Format("{0,4:D4}", maxScore);
             }
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && Time.timeScale > 0)
             {
                 // Reiniciamos el juego
                 lives = 3;
