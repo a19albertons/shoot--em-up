@@ -1,0 +1,10 @@
+{
+    "name": "GameCode.Editor",
+    "references": [
+        "GameCode",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}
