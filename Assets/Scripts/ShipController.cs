@@ -116,7 +116,7 @@ public class ShipController : MonoBehaviour
     void Update()
     {
         // Comprobar si la nave está activa y se ha pulsado la tecla de disparo (barra espaciadora)
-        if (active && Input.GetKeyDown(KeyCode.Space))
+        if (active && Input.GetKeyDown(KeyCode.Space) && Time.timeScale > 0)
         {
             // Calcular la posición donde se creará el disparo (un poco por delante de la nave)
             Vector3 shootPosition = transform.position + Vector3.up * shootOffset;
