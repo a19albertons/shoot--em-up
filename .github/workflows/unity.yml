@@ -2,11 +2,11 @@ name: Pruebas Unity y compilación
 
 on:
     push:
-        branches: [desarrollo, main]
+        branches: [main]
         tags:
             - 'shoot--em-up*'
     pull_request:
-        branches: [desarrollo]
+        branches: [main]
         paths-ignore: ['**.md']
 
 # Variables de entorno
