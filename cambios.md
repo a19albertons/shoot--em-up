@@ -1,6 +1,5 @@
 # Notas de desarrollo
-Shoot em up versión 1.2.0 esta disponible
+Shoot em up versión 1.2.1 esta disponible
 
-## El tercer lanzamiento de la aplicación contiene:
-- Soporte para Windows y web
-- Correción de bugs menores
+## Lanzamiento de mantenimiento de la aplicación contiene:
+- Se corrigen errores menores
