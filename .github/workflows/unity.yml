@@ -22,7 +22,10 @@ jobs:
     # tarea de tests
     test:
         name: test unity
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+            checks: write
         steps:
             # Configura checkout
             - uses: actions/checkout@v4
@@ -55,7 +58,7 @@ jobs:
     build:
         name: Compilación de Shot 'em up'
         needs: test
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         strategy:
             fail-fast: false
             matrix:
@@ -96,7 +99,9 @@ jobs:
     deploy:
         name: Despliegue en github
         needs: build
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: write
         if: startsWith(github.ref, 'refs/tags/shoot--em-up')
         steps:
             # Configura checkout
