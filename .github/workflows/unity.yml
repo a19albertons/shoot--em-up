@@ -109,7 +109,7 @@ jobs:
 
             # Descarga los artefactos de compilación
             - name: Descargar artefactos de compilacion
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                 path: all-builds
 
