@@ -127,7 +127,7 @@ jobs:
 
             # Subir los zips a la release de github
             - name: crear release y subir zips
-              uses: softprops/action-gh-release@v2
+              uses: softprops/action-gh-release@v3
               with:
                 #  Filtramos por todos los ficherosque acaban en .zip dentro de zip-builds
                 files: zip-builds/*.zip
