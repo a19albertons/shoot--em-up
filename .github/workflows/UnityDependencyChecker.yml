@@ -70,7 +70,7 @@ jobs:
 
             # Crea una Pull Request si se han realizado cambios en el manifest.json
             - name: Crear Pull Request si hay cambios
-              uses: peter-evans/create-pull-request@v6
+              uses: peter-evans/create-pull-request@v8
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   commit-message: "chore(deps): actualizar dependencias de Unity (versiones compatibles)"
