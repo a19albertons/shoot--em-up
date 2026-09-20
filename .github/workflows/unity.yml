@@ -32,7 +32,7 @@ jobs:
 
             # Gestiona la cache de Unity
             - name: Cache de Unity
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                 path: Library
                 key: Library-test-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -72,7 +72,7 @@ jobs:
 
                         # Gestiona la cache de Unity
             - name: Cache de Unity
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                 path: Library
                 key: Library-build-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
