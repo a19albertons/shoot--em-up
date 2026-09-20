@@ -6,11 +6,6 @@ on:
         - cron: "0 0 * * *"
     workflow_dispatch:
 
-# Configuración de permisos explicitos para el flujo de trabajo
-permissions:
-    contents: write
-    pull-requests: write
-
 # Variables de entorno
 env:
     # Email y contraseña
@@ -23,7 +18,10 @@ env:
 jobs:
     # Tarea para comprobar y actualizar las dependencias de Unity
     check-unity-updates:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: write
+            pull-requests: write
         steps:
             # Configura checkout del repositorio
             - name: Checkout del repositorio
