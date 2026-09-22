@@ -39,7 +39,7 @@ jobs:
 
             # Ejecuta el método estático de nuestro script de C# usando GameCI
             - name: Ejecutar comprobación en Unity
-              uses: game-ci/unity-builder@v4
+              uses: game-ci/unity-builder@v6
               with:
                   projectPath: .
                   # Indicamos a GameCI que ejecute tu script en lugar del Builder por defecto
