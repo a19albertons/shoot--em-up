@@ -1,3 +1,4 @@
+
 # Notas de desarrollo
 Shoot em up versión 1.2.2 esta disponible
 
